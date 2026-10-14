@@ -1,3 +1,5 @@
+using Loans.Api.Endpoints;
+using Loans.Api.ErrorHandling;
 using Loans.Application;
 using Loans.Infrastructure;
 
@@ -16,6 +18,10 @@ builder.Services.AddCors(options => options.AddPolicy(FrontendCorsPolicy, policy
     policy.WithOrigins(allowedOrigins).AllowAnyHeader().WithMethods("POST")));
 
 builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<BadRequestExceptionHandler>();
+
+// Validates request bodies from their DataAnnotations and returns 400 with errors per field.
+builder.Services.AddValidation();
 
 var app = builder.Build();
 
@@ -25,6 +31,7 @@ app.UseExceptionHandler();
 app.UseCors(FrontendCorsPolicy);
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+app.MapApplicationEndpoints();
 
 await app.RunAsync();
 
