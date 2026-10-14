@@ -14,8 +14,9 @@ public sealed class ApplicationStore
     public IReadOnlyCollection<StoredApplication> All() =>
         _applications.Values.OrderBy(a => a.CreatedAt).ToList();
 
-    /// <summary>Returns true the first time a key is seen, false for a repeated delivery.</summary>
-    public bool TryRegisterIdempotencyKey(string key) => _seenIdempotencyKeys.TryAdd(key, 0);
+    public bool IsRepeatedDelivery(string idempotencyKey) => _seenIdempotencyKeys.ContainsKey(idempotencyKey);
+
+    public void RememberDelivery(string idempotencyKey) => _seenIdempotencyKeys.TryAdd(idempotencyKey, 0);
 
     /// <summary>Creates the record. Returns false when the ID already exists (nothing is changed).</summary>
     public bool TryCreate(ApplicationPayload payload, DateTimeOffset now) =>
