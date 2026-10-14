@@ -1,6 +1,5 @@
 using Loans.Domain.Common;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Loans.Infrastructure.Persistence.Interceptors;
@@ -34,19 +33,8 @@ public sealed class AuditTimestampsInterceptor(TimeProvider clock) : SaveChanges
         {
             if (entry.State == EntityState.Added)
                 entry.Property(e => e.CreatedAt).CurrentValue = now;
-            else if (entry.State == EntityState.Modified || HasChangedOwnedData(entry))
+            else if (entry.State == EntityState.Modified)
                 entry.Property(e => e.UpdatedAt).CurrentValue = now;
         }
     }
-
-    /// <summary>
-    /// Value objects mapped as owned types (e.g. PersonalDetails) are tracked as their own
-    /// entries, so replacing one does not mark the owning entity as Modified by itself.
-    /// </summary>
-    private static bool HasChangedOwnedData(EntityEntry entry) =>
-        entry.References.Any(r =>
-            r.TargetEntry is { } owned
-            && owned.Metadata.IsOwned()
-            && (owned.State is EntityState.Added or EntityState.Modified or EntityState.Deleted
-                || HasChangedOwnedData(owned)));
 }
