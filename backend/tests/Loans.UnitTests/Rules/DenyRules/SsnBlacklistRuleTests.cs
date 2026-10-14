@@ -1,5 +1,5 @@
 using Loans.Application.Rules.DenyRules;
-using Loans.Domain.Customers;
+using Loans.Domain.Customers.ValueObjects;
 using Loans.UnitTests.Fakes;
 
 namespace Loans.UnitTests.Rules.DenyRules;

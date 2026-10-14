@@ -1,4 +1,6 @@
-namespace Loans.Domain.Customers;
+using Loans.Domain.Common;
+
+namespace Loans.Domain.Customers.ValueObjects;
 
 /// <summary>
 /// A Social Security Number normalized to 9 digits. Validates format only: never-issued
@@ -19,7 +21,7 @@ public sealed record Ssn
 
         var normalized = string.Concat(input.Where(c => c != '-' && !char.IsWhiteSpace(c)));
         if (normalized.Length != Length || !normalized.All(char.IsAsciiDigit))
-            throw new ArgumentException("SSN must have exactly 9 digits.", nameof(input));
+            throw new DomainException("SSN must have exactly 9 digits.");
 
         return new Ssn(normalized);
     }

@@ -1,5 +1,5 @@
 using Loans.Application.Abstractions;
-using Loans.Domain.Customers;
+using Loans.Domain.Customers.ValueObjects;
 
 namespace Loans.UnitTests.Fakes;
 

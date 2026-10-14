@@ -1,4 +1,4 @@
-using Loans.Domain.Customers;
+using Loans.Domain.Customers.ValueObjects;
 
 namespace Loans.Application.Rules;
 
