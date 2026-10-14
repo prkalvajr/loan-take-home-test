@@ -1,0 +1,87 @@
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.lead {
+  margin: 0 0 32px;
+  max-width: 600px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.formColumn {
+  flex: 999 1 560px;
+  min-width: 0;
+}
+
+.aside {
+  flex: 1 1 280px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.tintCard {
+  background: var(--color-surface-tint);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.cardTitle {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.checklist {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-body);
+}
+
+.note {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #2d3a34;
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 24px 16px 48px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+}
