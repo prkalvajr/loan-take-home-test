@@ -10,22 +10,22 @@ namespace Loans.Api.Contracts;
 /// </summary>
 public sealed record SubmitApplicationRequest
 {
-    [Required, MaxLength(100)]
+    [Required(ErrorMessage = "Enter your first name."), MaxLength(100)]
     public string? FirstName { get; init; }
 
-    [Required, MaxLength(100)]
+    [Required(ErrorMessage = "Enter your last name."), MaxLength(100)]
     public string? LastName { get; init; }
 
-    [Required, MaxLength(200)]
+    [Required(ErrorMessage = "Enter your company name."), MaxLength(200)]
     public string? CompanyName { get; init; }
 
-    [Required]
+    [Required(ErrorMessage = "Enter the business address.")]
     public AddressRequest? Address { get; init; }
 
-    [Required, Money]
+    [Required(ErrorMessage = "Enter the requested amount."), Money]
     public decimal? RequestedAmount { get; init; }
 
-    [Required, RegularExpression("^[0-9]{3}-?[0-9]{2}-?[0-9]{4}$", ErrorMessage = "Enter a 9-digit SSN, like 123-45-6789.")]
+    [Required(ErrorMessage = "Enter your SSN."), RegularExpression("^[0-9]{3}-?[0-9]{2}-?[0-9]{4}$", ErrorMessage = "Enter a 9-digit SSN, like 123-45-6789.")]
     public string? Ssn { get; init; }
 
     /// <summary>Only called after validation passed, so the null-forgiving operators are safe.</summary>
