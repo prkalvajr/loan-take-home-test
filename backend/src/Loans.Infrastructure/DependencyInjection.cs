@@ -1,5 +1,6 @@
 using Loans.Application.Abstractions;
 using Loans.Infrastructure.Blacklist;
+using Loans.Infrastructure.Outbox;
 using Loans.Infrastructure.Persistence;
 using Loans.Infrastructure.Persistence.Interceptors;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<LoansDbContext>());
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<ISsnBlacklist, SsnBlacklist>();
+        services.AddScoped<IOutbox, OutboxWriter>();
 
         return services;
     }
