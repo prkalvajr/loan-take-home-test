@@ -1,5 +1,6 @@
 using Loans.Application.Abstractions;
 using Loans.Domain.Customers;
+using Loans.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 
 namespace Loans.Infrastructure.Persistence;
@@ -11,6 +12,7 @@ namespace Loans.Infrastructure.Persistence;
 public sealed class LoansDbContext(DbContextOptions<LoansDbContext> options) : DbContext(options), IUnitOfWork
 {
     public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LoansDbContext).Assembly);
