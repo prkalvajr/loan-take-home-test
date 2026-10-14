@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loans.Domain", "backend\src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loans.Application", "backend\src\Loans.Application\Loans.Application.csproj", "{5A325D2E-EC64-4B00-A9F7-102BC721984D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loans.Infrastructure", "backend\src\Loans.Infrastructure\Loans.Infrastructure.csproj", "{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,18 @@ Global
 		{5A325D2E-EC64-4B00-A9F7-102BC721984D}.Release|x64.Build.0 = Release|Any CPU
 		{5A325D2E-EC64-4B00-A9F7-102BC721984D}.Release|x86.ActiveCfg = Release|Any CPU
 		{5A325D2E-EC64-4B00-A9F7-102BC721984D}.Release|x86.Build.0 = Release|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Debug|x64.Build.0 = Debug|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Debug|x86.Build.0 = Debug|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Release|x64.ActiveCfg = Release|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Release|x64.Build.0 = Release|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Release|x86.ActiveCfg = Release|Any CPU
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,5 +64,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4AB3A27F-5A0A-450E-8F7D-6F5179E9E247} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 		{5A325D2E-EC64-4B00-A9F7-102BC721984D} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
+		{F2CC2E5C-D4A6-4A5E-B7E1-4898CF5EFC79} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 	EndGlobalSection
 EndGlobal
