@@ -26,4 +26,15 @@ public static class DependencyInjection
 
         return services;
     }
+
+    /// <summary>
+    /// Creates or upgrades the database schema. Run on startup so `docker compose up` needs no
+    /// manual step; production would run migrations as a separate deployment step instead.
+    /// </summary>
+    public static async Task ApplyMigrationsAsync(this IServiceProvider services)
+    {
+        await using var scope = services.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<LoansDbContext>();
+        await db.Database.MigrateAsync();
+    }
 }

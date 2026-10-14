@@ -19,12 +19,14 @@ builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
+await app.Services.ApplyMigrationsAsync();
+
 app.UseExceptionHandler();
 app.UseCors(FrontendCorsPolicy);
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
-app.Run();
+await app.RunAsync();
 
 // Exposed so integration tests can use WebApplicationFactory<Program>.
 public partial class Program;
