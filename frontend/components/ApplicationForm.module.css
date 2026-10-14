@@ -1,0 +1,154 @@
+.banner {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-bg-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-error-text);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.banner:focus {
+  outline: none;
+}
+
+.banner strong {
+  display: block;
+  font-weight: 600;
+}
+
+.bannerIcon {
+  flex: none;
+  margin-top: 1px;
+}
+
+.form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.half {
+  flex: 1 1 200px;
+}
+
+.city {
+  flex: 2 1 200px;
+}
+
+.state {
+  flex: 1 1 150px;
+}
+
+.zip {
+  flex: 1 1 130px;
+}
+
+.narrow {
+  max-width: 320px;
+}
+
+.ssnInput {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.amountWrapper {
+  position: relative;
+}
+
+.amountPrefix {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.amountInput {
+  padding-left: 26px;
+  font-variant-numeric: tabular-nums;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-divider);
+}
+
+.submit {
+  height: 48px;
+  padding: 0 24px;
+  background: var(--color-primary);
+  color: #ffffff;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit:hover {
+  background: var(--color-primary-hover);
+}
+
+.submit:disabled {
+  background: var(--color-primary-busy);
+  cursor: progress;
+}
+
+.confirm {
+  flex: 1 1 220px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 480px) {
+  .form {
+    padding: 20px;
+  }
+}
