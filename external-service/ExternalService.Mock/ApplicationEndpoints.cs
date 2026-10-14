@@ -28,7 +28,7 @@ public static class ApplicationEndpoints
             logger.LogInformation("Application {ApplicationId} created (key {IdempotencyKey})", payload.ApplicationId, key);
             store.RememberDelivery(key);
             return Results.Created($"/applications/{payload.ApplicationId}", null);
-        });
+        }).AddEndpointFilter<FailureInjectionFilter>();
 
         group.MapPut("/{applicationId:guid}", (Guid applicationId, ApplicationPayload payload, HttpRequest request,
             ApplicationStore store, TimeProvider clock, ILogger<ApplicationStore> logger) =>
@@ -49,7 +49,7 @@ public static class ApplicationEndpoints
             logger.LogInformation("Application {ApplicationId} updated (key {IdempotencyKey})", applicationId, key);
             store.RememberDelivery(key);
             return Results.Ok();
-        });
+        }).AddEndpointFilter<FailureInjectionFilter>();
     }
 
     private static bool IsRepeated(string key, ApplicationStore store, ILogger logger)
