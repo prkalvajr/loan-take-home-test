@@ -1,6 +1,6 @@
 using Loans.Application.Rules.DenyRules;
 
-namespace Loans.UnitTests.Rules.DenyRules;
+namespace Loans.UnitTests.Application.Rules.DenyRules;
 
 public class NewYorkStateRuleTests
 {

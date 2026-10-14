@@ -1,7 +1,7 @@
 using Loans.Application.Rules;
 using Loans.Domain.Customers.ValueObjects;
 
-namespace Loans.UnitTests.Rules;
+namespace Loans.UnitTests.Application.Rules;
 
 /// <summary>Builds rule inputs that pass every rule unless a test overrides a value.</summary>
 public static class RuleInputs

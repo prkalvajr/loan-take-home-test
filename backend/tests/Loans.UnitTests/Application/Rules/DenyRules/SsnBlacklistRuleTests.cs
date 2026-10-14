@@ -2,7 +2,7 @@ using Loans.Application.Rules.DenyRules;
 using Loans.Domain.Customers.ValueObjects;
 using Loans.UnitTests.Fakes;
 
-namespace Loans.UnitTests.Rules.DenyRules;
+namespace Loans.UnitTests.Application.Rules.DenyRules;
 
 public class SsnBlacklistRuleTests
 {

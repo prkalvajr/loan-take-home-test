@@ -2,7 +2,7 @@ using Loans.Application.Rules;
 using Loans.Application.Rules.DenyRules;
 using Loans.UnitTests.Fakes;
 
-namespace Loans.UnitTests.Rules;
+namespace Loans.UnitTests.Application.Rules;
 
 /// <summary>The engine with the real rules and a fake blacklist.</summary>
 public class RuleEngineTests
