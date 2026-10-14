@@ -41,4 +41,36 @@ public sealed class OutboxMessage
         NextAttemptAt = now,
         CreatedAt = now,
     };
+
+    /// <summary>After this many failed attempts the message is marked Failed (about 30 s of retries).</summary>
+    public const int MaxAttempts = 5;
+
+    private const int MaxErrorLength = 2000;
+
+    /// <summary>Wait before the next try: 2 s, 4 s, 8 s, 16 s after attempts 1 to 4.</summary>
+    public static TimeSpan RetryDelay(int failedAttempts) => TimeSpan.FromSeconds(Math.Pow(2, failedAttempts));
+
+    public void MarkProcessed(DateTimeOffset now)
+    {
+        Attempts++;
+        Status = OutboxMessageStatus.Processed;
+        ProcessedAt = now;
+        LastError = null;
+    }
+
+    /// <summary>
+    /// Records a failed delivery. A retryable failure (5xx, timeout, network) is tried again
+    /// after <see cref="RetryDelay"/> until <see cref="MaxAttempts"/>; anything else (4xx) will
+    /// not fix itself, so the message is marked Failed at once.
+    /// </summary>
+    public void RecordFailure(string error, bool retryable, DateTimeOffset now)
+    {
+        Attempts++;
+        LastError = error.Length <= MaxErrorLength ? error : error[..MaxErrorLength];
+
+        if (!retryable || Attempts >= MaxAttempts)
+            Status = OutboxMessageStatus.Failed;
+        else
+            NextAttemptAt = now + RetryDelay(Attempts);
+    }
 }
