@@ -59,6 +59,27 @@ public sealed class LoansApiFactory : WebApplicationFactory<Program>, IAsyncLife
         ExternalService.Reset();
     }
 
+    /// <summary>
+    /// Makes Postgres itself reject every insert into outbox_messages, so SaveChangesAsync fails
+    /// after the customer and application rows were already sent in the same transaction.
+    /// </summary>
+    public async Task RejectOutboxInsertsAsync()
+    {
+        await using var db = CreateDbContext();
+        await db.Database.ExecuteSqlRawAsync("""
+            CREATE OR REPLACE FUNCTION reject_outbox_insert() RETURNS trigger AS $$
+            BEGIN RAISE EXCEPTION 'outbox insert rejected by test'; END $$ LANGUAGE plpgsql;
+            CREATE OR REPLACE TRIGGER reject_outbox_insert BEFORE INSERT ON outbox_messages
+                FOR EACH ROW EXECUTE FUNCTION reject_outbox_insert();
+            """);
+    }
+
+    public async Task AllowOutboxInsertsAsync()
+    {
+        await using var db = CreateDbContext();
+        await db.Database.ExecuteSqlRawAsync("DROP TRIGGER IF EXISTS reject_outbox_insert ON outbox_messages");
+    }
+
     public Task InitializeAsync() => _postgres.StartAsync();
 
     async Task IAsyncLifetime.DisposeAsync()
