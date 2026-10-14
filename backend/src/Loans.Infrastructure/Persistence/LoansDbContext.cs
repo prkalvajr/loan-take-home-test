@@ -3,6 +3,7 @@ using Loans.Domain.Customers;
 using Loans.Infrastructure.Blacklist;
 using Loans.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Loans.Infrastructure.Persistence;
 
@@ -18,4 +19,20 @@ public sealed class LoansDbContext(DbContextOptions<LoansDbContext> options) : D
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LoansDbContext).Assembly);
+
+    /// <summary>
+    /// Translates a Postgres unique violation into <see cref="PersistenceConflictException"/>,
+    /// so the Application layer can handle it without knowing about Postgres.
+    /// </summary>
+    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+        catch (DbUpdateException e) when (e.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } unique)
+        {
+            throw new PersistenceConflictException($"Unique constraint '{unique.ConstraintName}' was violated.", e);
+        }
+    }
 }
