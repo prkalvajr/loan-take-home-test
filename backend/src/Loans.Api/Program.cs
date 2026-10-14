@@ -10,8 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Loans")
     ?? throw new InvalidOperationException("Connection string 'Loans' is missing.");
 
+// Trailing slash so relative paths like "applications" resolve under the base URL.
+var externalServiceBaseUrl = new Uri(
+    (builder.Configuration["ExternalService:BaseUrl"] ?? throw new InvalidOperationException("ExternalService:BaseUrl is missing."))
+        .TrimEnd('/') + "/");
+
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(connectionString);
+builder.Services.AddInfrastructure(connectionString, externalServiceBaseUrl);
+
+if (builder.Configuration.GetValue("Outbox:WorkerEnabled", defaultValue: true))
+    builder.Services.AddOutboxWorker();
 
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 builder.Services.AddCors(options => options.AddPolicy(FrontendCorsPolicy, policy =>
