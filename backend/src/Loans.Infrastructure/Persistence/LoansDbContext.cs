@@ -1,5 +1,6 @@
 using Loans.Application.Abstractions;
 using Loans.Domain.Customers;
+using Loans.Infrastructure.Blacklist;
 using Loans.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public sealed class LoansDbContext(DbContextOptions<LoansDbContext> options) : D
 {
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+    public DbSet<BlacklistedSsn> BlacklistedSsns => Set<BlacklistedSsn>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LoansDbContext).Assembly);
