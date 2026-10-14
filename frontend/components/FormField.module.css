@@ -1,0 +1,43 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.control {
+  height: 44px;
+  width: 100%;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-sm);
+}
+
+select.control {
+  padding: 0 10px;
+}
+
+.control[aria-invalid="true"] {
+  border-color: var(--color-error-border);
+}
+
+.error {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-error);
+}
+
+.hint {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
