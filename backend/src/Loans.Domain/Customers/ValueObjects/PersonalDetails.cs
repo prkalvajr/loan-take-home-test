@@ -10,6 +10,14 @@ public sealed record PersonalDetails
     public string CompanyName { get; }
     public Address Address { get; }
 
+    // Used by EF Core when loading from the database: it cannot pass the nested Address
+    // through a constructor, so it sets the properties after creating the object.
+    private PersonalDetails()
+    {
+        FirstName = LastName = CompanyName = null!;
+        Address = null!;
+    }
+
     private PersonalDetails(string firstName, string lastName, string companyName, Address address)
     {
         FirstName = firstName;
