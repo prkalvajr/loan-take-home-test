@@ -1,49 +1,68 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --color-bg: #f5f6f3;
+  --color-surface: #ffffff;
+  --color-surface-tint: #eaf1ee;
+  --color-border: #dde1dc;
+  --color-divider: #e6e9e5;
+  --color-input-border: #8a938d;
+  --color-text: #16211c;
+  --color-text-body: #3b4640;
+  --color-text-muted: #56615b;
+  --color-placeholder: #6b756f;
+  --color-primary: #1f5e4a;
+  --color-primary-hover: #163f33;
+  --color-primary-busy: #5e7f74;
+  --color-success-bg: #e1eee8;
+  --color-error: #9e2f14;
+  --color-error-border: #b3361a;
+  --color-error-bg: #fbede8;
+  --color-error-bg-border: #e2ae9b;
+  --color-error-text: #7a2e15;
+  --color-reason-bg: #faf5f2;
+  --color-reason-border: #ebd6cc;
+  --color-reason-icon-bg: #f7e3db;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
 }
 
 * {
   box-sizing: border-box;
-  padding: 0;
+}
+
+html,
+body {
   margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-public-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: var(--color-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+input::placeholder {
+  color: var(--color-placeholder);
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
 }
