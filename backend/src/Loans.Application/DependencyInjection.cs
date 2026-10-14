@@ -1,5 +1,6 @@
 using Loans.Application.Rules;
 using Loans.Application.Rules.DenyRules;
+using Loans.Application.UseCases.SubmitApplication;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Loans.Application;
@@ -12,6 +13,8 @@ public static class DependencyInjection
         services.AddScoped<IDenyRule, NewYorkStateRule>();
         services.AddScoped<IDenyRule, SsnBlacklistRule>();
         services.AddScoped<RuleEngine>();
+
+        services.AddScoped<SubmitApplicationUseCase>();
 
         return services;
     }
