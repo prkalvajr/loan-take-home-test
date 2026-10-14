@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: loans
+      POSTGRES_USER: loans
+      POSTGRES_PASSWORD: loans
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loans -d loans"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  external-service:
+    build:
+      context: .
+      dockerfile: external-service/ExternalService.Mock/Dockerfile
+    environment:
+      FAIL_RATE: ${FAIL_RATE:-0}
+    ports:
+      - "5090:8080"
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/src/Loans.Api/Dockerfile
+    environment:
+      ConnectionStrings__Loans: Host=db;Port=5432;Database=loans;Username=loans;Password=loans
+      ExternalService__BaseUrl: http://external-service:8080
+      Cors__AllowedOrigins__0: http://localhost:3000
+    ports:
+      - "5080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      external-service:
+        condition: service_started
+
+volumes:
+  db-data:
