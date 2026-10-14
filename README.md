@@ -40,7 +40,7 @@ docker compose up --build
 | Frontend         | http://localhost:3000  |
 | Api              | http://localhost:5080  |
 | External service | http://localhost:5090  |
-| PostgreSQL       | localhost:5432 (user, password and database: `loans`) |
+| PostgreSQL       | localhost:5434 (user, password and database: `loans`) |
 
 To make the external service fail so you can watch the retries: `FAIL_RATE=1 docker compose up --build`.
 

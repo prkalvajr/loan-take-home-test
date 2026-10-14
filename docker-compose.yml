@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: loans
       POSTGRES_PASSWORD: loans
     ports:
-      - "5432:5432"
+      - "5434:5432"   # 5434 on the host avoids clashing with a locally installed Postgres
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
