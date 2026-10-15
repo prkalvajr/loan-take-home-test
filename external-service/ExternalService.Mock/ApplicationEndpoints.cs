@@ -27,7 +27,7 @@ public static class ApplicationEndpoints
 
             logger.LogInformation("Application {ApplicationId} created (key {IdempotencyKey})", payload.ApplicationId, key);
             store.RememberDelivery(key);
-            return Results.Created($"/applications/{payload.ApplicationId}", null);
+            return Results.Ok();
         }).AddEndpointFilter<FailureInjectionFilter>();
 
         group.MapPut("/{applicationId:guid}", (Guid applicationId, ApplicationPayload payload, HttpRequest request,

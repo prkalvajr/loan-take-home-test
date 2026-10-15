@@ -68,7 +68,7 @@ The mock stores applications in memory, keyed by **our** application ID. Data is
 
 | Method | Path                            | Sent when              | Behaviour |
 | ------ | ------------------------------- | ---------------------- | --------- |
-| POST   | `/applications`                 | `ApplicationCreated`   | `201` on create. An ID it already has returns `200` and creates nothing. |
+| POST   | `/applications`                 | `ApplicationCreated`   | `200`, creates the record. An ID it already has also returns `200` and creates nothing. |
 | PUT    | `/applications/{applicationId}` | `ApplicationUpdated`   | `200`, replaces the record. Unknown ID returns `404`. |
 | GET    | `/applications`                 | Demo only              | Lists everything received, with `createdAt`, `updatedAt` and `version`. |
 
