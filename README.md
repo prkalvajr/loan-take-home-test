@@ -118,8 +118,8 @@ Any valid values work. These trigger each path:
 | **Denied: blacklisted SSN** | `000-00-0001`, `000-00-0002` or `666-12-3456` → `SSN_BLACKLISTED` |
 | **Denied: both reasons** | State `NY` **and** a blacklisted SSN |
 | **Returning customer** | Submit an approved application, then submit again with the **same SSN** and different details or amount. The page says "Your application was updated" and the application ID stays the same. |
-| **External service received it** | Open http://localhost:5090/applications a couple of seconds after an approval. After an update the record shows `version: 2`. |
-| **Retries** | Start with `FAIL_RATE=1 docker compose up --build` and watch `docker compose logs -f api`: attempts 1–5, waiting 2, 4, 8, 16 s, then `Failed`. |
+| **External service received it** | Open http://localhost:5090/applications up to 10 seconds after an approval (the worker checks the outbox every 10 s). After an update the record shows `version: 2`. |
+| **Retries** | Start with `FAIL_RATE=1 docker compose up --build` and watch `docker compose logs -f api`: attempts 1–5 roughly 10 s apart (the 2, 4, 8, 16 s retry waits are rounded up to the next 10 s worker tick), then `Failed` after about 50 s. |
 
 A full example: Maria Lopez, Lopez Bakery LLC, 500 Congress Ave, Austin, TX 78701, SSN `246-81-3579`, amount `50000`.
 

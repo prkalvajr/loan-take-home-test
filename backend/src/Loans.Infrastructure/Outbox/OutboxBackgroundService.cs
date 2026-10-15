@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace Loans.Infrastructure.Outbox;
 
 /// <summary>
-/// Polls the outbox every 2 s and delivers every due message, outside any HTTP request.
+/// Polls the outbox every 10 s and delivers every due message, outside any HTTP request.
 /// Polling is the only delivery path (no send right after commit), so there is one code path
 /// to reason about. A single Api instance is assumed: with several, the query would need
 /// SELECT ... FOR UPDATE SKIP LOCKED so two workers never send the same message.
@@ -13,7 +13,7 @@ namespace Loans.Infrastructure.Outbox;
 public sealed class OutboxBackgroundService(IServiceScopeFactory scopes, ILogger<OutboxBackgroundService> logger)
     : BackgroundService
 {
-    private static readonly TimeSpan PollInterval = TimeSpan.FromSeconds(2);
+    private static readonly TimeSpan PollInterval = TimeSpan.FromSeconds(10); // Slow enough to watch rows change during the demo.
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

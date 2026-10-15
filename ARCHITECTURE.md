@@ -23,7 +23,7 @@ flowchart LR
     API --> UC[SubmitApplicationUseCase]
     UC --> RE[Rule engine]
     UC -- one transaction --> DB[(PostgreSQL<br/>customers · applications · outbox_messages)]
-    W[Outbox worker<br/>BackgroundService] -- polls every 2 s --> DB
+    W[Outbox worker<br/>BackgroundService] -- polls every 10 s --> DB
     W -- POST / PUT + Idempotency-Key --> EXT[External service mock]
 ```
 
@@ -177,7 +177,7 @@ This is proved against real Postgres by `SubmitApplicationTransactionTests`. A t
 
 ## 7. Background event delivery
 
-`OutboxBackgroundService` (a .NET `BackgroundService` hosted by the API) wakes up every **2 seconds** and delivers every due message. Each message gets its own DI scope and `DbContext`.
+`OutboxBackgroundService` (a .NET `BackgroundService` hosted by the API) wakes up every **10 seconds** and delivers every due message. That is deliberately slow, so the outbox rows can be watched changing during the demo; 1–2 s would suit production. Each message gets its own DI scope and `DbContext`.
 
 **Which message is next** (`OutboxProcessor`): the oldest message that is `Pending`, whose `NextAttemptAt` has passed, and whose customer has **no earlier message that is not yet `Processed`**. This gives:
 
@@ -198,7 +198,7 @@ Every request carries `Idempotency-Key: <outbox MessageId>`, and the HTTP client
 | Response | Classification | What happens |
 | --- | --- | --- |
 | `2xx` | Success | `Processed`, `ProcessedAt` set |
-| `5xx`, `408`, `429`, timeout, network error | Retryable | Retried after 2 s, 4 s, 8 s, 16 s (exponential); `Failed` after 5 attempts (about 30 s) |
+| `5xx`, `408`, `429`, timeout, network error | Retryable | Retried after 2 s, 4 s, 8 s, 16 s (exponential), on the first worker tick after that time; `Failed` after 5 attempts |
 | Other `4xx` | Permanent | `Failed` at once; retrying would not fix it |
 
 `Attempts`, `LastError` and `NextAttemptAt` are stored on the row, so the state of every message can be inspected in the database.
@@ -216,7 +216,7 @@ Every request carries `Idempotency-Key: <outbox MessageId>`, and the HTTP client
 | External service down, slow or returning `5xx` | The API is unaffected; the user already has their answer | The outbox retries with backoff; the message stays `Pending` until it succeeds or reaches 5 attempts |
 | External service rejects the message (`4xx`) | Message `Failed` | Logged with the error; that customer's later messages wait until it is replayed (see trade-offs) |
 | API crashes or restarts | Committed messages are in the database | The worker picks them up on startup; duplicates are absorbed by the idempotency key |
-| Worker loop throws (for example, the database blips) | One tick is lost | Logged; the next tick 2 s later tries again |
+| Worker loop throws (for example, the database blips) | One tick is lost | Logged; the next tick 10 s later tries again |
 
 ## 9. Tests
 
@@ -233,7 +233,7 @@ In integration tests the background worker is switched off (`Outbox:WorkerEnable
 
 | Decision | Why | Cost, and what I would do with more time |
 | --- | --- | --- |
-| Outbox **polling** every 2 s, no "send right after commit" | One delivery path, simple to reason about and test | Up to about 2 s of delay. Could add an in-process signal after commit, or Postgres `LISTEN/NOTIFY`. |
+| Outbox **polling** every 10 s, no "send right after commit" | One delivery path, simple to reason about and test | Up to 10 s of delay (chosen for the demo; 1–2 s in production). Could add an in-process signal after commit, or Postgres `LISTEN/NOTIFY`. |
 | **Single API instance** assumed for the worker | Enough for this scope | Two instances could send the same message twice (still safe because of the idempotency key, but wasteful). Scale-out: `SELECT ... FOR UPDATE SKIP LOCKED`, or move the worker into its own service. |
 | A **`Failed` message blocks that customer's later messages** | Keeps PUT from arriving before its POST | Needs a manual replay (reset the row to `Pending`). Next: an admin endpoint or a dashboard for failed messages, plus an alert. |
 | Retries are **2/4/8/16 s, 5 attempts** (about 30 s) | Short enough to show in a demo | Real third-party outages last longer; production would use minutes to hours, with jitter. Note: the decision log listed 2–32 s, but 5 attempts leave room for only 4 waits; a 32 s wait would need a 6th attempt. |
