@@ -1,6 +1,6 @@
 # Loan Application — Fundo Take-Home
 
-> Demo video: _coming soon_
+> **Demo video:** https://drive.google.com/file/d/172iDhSE2XsShqMIGffpWNLF_P_JpCnd7/view?usp=sharing
 
 A Next.js form posts to a .NET API. A rule engine approves or denies the application. Approved applications are saved to PostgreSQL together with an outbox message in one transaction, and a background worker delivers that message to a mock external service.
 
