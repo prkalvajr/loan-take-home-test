@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +31,8 @@ const INVALID: Banner = {
 export function ApplicationForm() {
   const router = useRouter();
   const [banner, setBanner] = useState<Banner | null>(null);
-  const [redirecting, setRedirecting] = useState(false);
+  // Set while navigating to a result page; keeps the button disabled until the page changes.
+  const [leavingTo, setLeavingTo] = useState<"approved" | "denied" | null>(null);
   const bannerRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -39,6 +40,7 @@ export function ApplicationForm() {
     control,
     handleSubmit,
     setError,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
@@ -50,13 +52,24 @@ export function ApplicationForm() {
     if (banner) bannerRef.current?.focus();
   }, [banner]);
 
+  // With Cache Components, Next.js hides this page on navigation instead of unmounting it, so
+  // state survives the trip to the result page and back. This cleanup runs when the page is
+  // hidden: the button is ready again, and after an approval the form starts empty. After a
+  // denial the answers are kept, so the user can correct them.
+  const onHidden = useEffectEvent(() => {
+    if (leavingTo === "approved") reset(emptyApplicationForm);
+    setLeavingTo(null);
+  });
+
+  useLayoutEffect(() => () => onHidden(), []);
+
   const onSubmit = async (values: ApplicationFormValues) => {
     setBanner(null);
     const result = await submitApplication(values);
 
     switch (result.kind) {
       case "approved": {
-        setRedirecting(true);
+        setLeavingTo("approved");
         const params = new URLSearchParams({
           type: result.isReturningCustomer ? "updated" : "new",
           id: result.applicationId,
@@ -65,7 +78,7 @@ export function ApplicationForm() {
         return;
       }
       case "denied": {
-        setRedirecting(true);
+        setLeavingTo("denied");
         router.push(`/denied?${new URLSearchParams({ reasons: result.reasons.join(",") })}`);
         return;
       }
@@ -83,7 +96,7 @@ export function ApplicationForm() {
     }
   };
 
-  const busy = isSubmitting || redirecting;
+  const busy = isSubmitting || leavingTo !== null;
 
   return (
     <>
